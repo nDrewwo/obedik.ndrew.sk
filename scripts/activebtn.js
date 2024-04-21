@@ -1,12 +1,16 @@
-const reznikBtn = document.getElementById('reznikBtn');
-const hranolkyBtn = document.getElementById('hranolkyBtn');
+const toggleBtns = document.querySelectorAll('.toggle-btn'); // Select all toggle buttons
 
-reznikBtn.addEventListener('click', () => {
-    reznikBtn.classList.toggle('active');
-    hranolkyBtn.classList.remove('active'); // Ensure only one button is active
-});
-
-hranolkyBtn.addEventListener('click', () => {
-    hranolkyBtn.classList.toggle('active');
-    reznikBtn.classList.remove('active'); // Ensure only one button is active
+toggleBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const obedDiv = btn.closest('.obed'); // Find closest parent obed div
+    const otherBtns = obedDiv.querySelectorAll('.toggle-btn'); // Select all toggle buttons within the obed div
+    
+    otherBtns.forEach(otherBtn => {
+      if (otherBtn !== btn) {
+        otherBtn.classList.remove('active'); // Deactivate other buttons within the same obed div
+      }
+    });
+    
+    btn.classList.toggle('active'); // Toggle active state for the clicked button
+  });
 });
