@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log in</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div id="content">  
+        <h2>Welcome Back!</h2>
+        <form action="login_process.php" method="post">
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username" required>
+
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+
+            <input type="submit" value="Login">
+        </form>
+        <a href="forgot_password.php" class="href"><p>Forgot password?</p></a>
+    </div>
+</body>
+</html>
