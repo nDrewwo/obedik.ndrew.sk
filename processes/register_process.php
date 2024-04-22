@@ -20,6 +20,6 @@ $result = $conn->query($sql);
 $conn->close();
 
 // Redirect to a landing page
-header("Location: dashboard.php");
+header("Location: ../sexydash.php");
 exit();
 ?>

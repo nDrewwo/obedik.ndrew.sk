@@ -26,14 +26,15 @@
     // Build obed div HTML dynamically
     $obedDiv = "<div class=\"obed\">
                   <h1 class=\"date\">$lunchDate</h1>
-                  <form action=\"submit_order.php\" method=\"post\">
-                    <div class=\"toggle\">
-                      <button type=\"button\" id=\"option1\" class=\"toggle-btn\"><h1>$choice1</h1></button>
-                      <h1>|</h1>
-                      <button type=\"button\" id=\"option2\" class=\"toggle-btn\"><h1>$choice2</h1></button>
-                    </div>
-                    <input type=\"hidden\" name=\"item\"><button type=\"submit\"><h1>Submit</h1></button>
-                  </form>
+                  <form action=\"processes/submit_process.php\" method=\"post\">
+                  <div class=\"toggle\">
+                    <button type=\"button\" id=\"option1\" class=\"toggle-btn\"><h1>$choice1</h1></button>
+                    <h1>|</h1>
+                    <button type=\"button\" id=\"option2\" class=\"toggle-btn\"><h1>$choice2</h1></button>
+                  </div>
+                  <input type=\"hidden\" name=\"item\">  <button type=\"submit\"><h1>Submit</h1></button>
+                </form>
+                
                 </div>";
 
     // Echo the constructed obed div

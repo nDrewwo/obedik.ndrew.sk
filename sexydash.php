@@ -1,3 +1,5 @@
+<?php session_start()?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +10,11 @@
 </head>
 <body>
   <div id="infocontainer">
-    <h1>Ahoj Squashi!</h1>
-    <h1>Balance: 20$</h1>
+    <h1>Ahoj  <?php echo $_SESSION['username']; ?>!</h1>
+    <h1>Balance: <?php echo $_SESSION['balance']?>$</h1>
   </div>
   <?php include 'processes/lunches_process.php'; ?>
   <script src="scripts/activebtn.js"></script>
+  <script src="scripts/choicelogic.js"></script>
 </body>
 </html>

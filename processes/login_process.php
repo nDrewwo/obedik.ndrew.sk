@@ -21,11 +21,12 @@ if ($result->num_rows > 0) {
   $row = $result->fetch_assoc();
 
   // Verify the password using password_verify()
-  if (password_verify($password, $row['password'])) {
+  if (password_verify($password, $row['Password'])) {
     // Password is correct, set session variables and redirect
     $_SESSION['username'] = $username;
-    $_SESSION['user_rfid'] = $row['rfid']; // Retrieve RFID from the row
-    header("Location: dashboard.php");
+    $_SESSION['user_rfid'] = $row['RFID']; // Retrieve RFID from the row
+    $_SESSION['balance'] = $row['Balance']; // Retrieve balance from the row
+    header("Location: ../sexydash.php");
     exit();
   } else {
     // Incorrect password
