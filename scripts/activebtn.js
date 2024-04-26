@@ -1,16 +1,19 @@
-const toggleBtns = document.querySelectorAll('.toggle-btn'); // Select all toggle buttons
+const toggleBtns = document.querySelectorAll('.toggle-btn');
 
 toggleBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    const obedDiv = btn.closest('.obed'); // Find closest parent obed div
-    const otherBtns = obedDiv.querySelectorAll('.toggle-btn'); // Select all toggle buttons within the obed div
-    
-    otherBtns.forEach(otherBtn => {
+    // Toggle active class on the clicked button
+    btn.classList.toggle('active');
+
+    // Deactivate all other buttons except the clicked one
+    toggleBtns.forEach(otherBtn => {
       if (otherBtn !== btn) {
-        otherBtn.classList.remove('active'); // Deactivate other buttons within the same obed div
+        otherBtn.classList.remove('active');
       }
     });
-    
-    btn.classList.toggle('active'); // Toggle active state for the clicked button
+
+    // Update hidden input value (optional, customize as needed)
+    const selectedChoice = btn.textContent.trim(); // Get button text (Choice 1 or Choice 2)
+    document.querySelector('input[name="item"]').value = selectedChoice;
   });
 });

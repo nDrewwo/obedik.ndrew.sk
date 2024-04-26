@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P:400,700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Press Start 2P';
+  background-color: #60695C;
+}
+
+button{
+  font-family: 'Press Start 2P'
+}
+
+.collapsible {
+  background-color: #f3f4f5;
+  color: #60695C;
+  cursor: pointer;
+  width: 95vw;
+  height: 10vh;
+  border: none;
+  text-align: center;
+  outline: none;
+  font-size: 15px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.active, .collapsible:hover {
+  transform: translateY(-5px);
+}
+
+.content {
+  width: 95vw;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f3f4f5;
+  border-radius: 10px;
+}
+
+.obedik{
+  background-color: #f3f4f5;
+  margin-top: 1rem;
+  border-radius: 10px;
+  width: 95vw;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center button content vertically */
+  width: 100%;
+}
+
+.toggle h1 {
+  margin: 0 10px; /* Adjust spacing between separator and buttons */
+}
+
+.toggle-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  padding: 1rem;
+  width: 95%;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #f3f4f5;
+  color: #60695C;
+
+}
+
+.toggle-btn.active {
+  background-color: #60695C; /* Active button background color */
+  color: #f3f4f5;
+}
+
+.submitBtn {
+  width: 95%;
+  background-color: #41493E;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #f3f4f5;
+  border: none;
+  border-radius: 10px;
+}
+
+.submitBtn:hover{
+  background-color: #2b3029;
+  transition: 0.5s;
+}
+
+

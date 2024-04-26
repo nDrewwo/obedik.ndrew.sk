@@ -16,6 +16,7 @@ $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 $sql = "INSERT INTO users (rfid, username, password) VALUES ('$rfid','$username', '$password')";
 $result = $conn->query($sql);
 
+
 // Close the database connection
 $conn->close();
 
