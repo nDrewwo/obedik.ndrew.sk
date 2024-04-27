@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
     $_SESSION['username'] = $username;
     $_SESSION['user_rfid'] = $row['RFID']; // Retrieve RFID from the row
     $_SESSION['balance'] = $row['Balance']; // Retrieve balance from the row
-    header("Location: ../sexydash.php");
+    header("Location: ../dashboard.php");
     exit();
   } else {
     // Incorrect password

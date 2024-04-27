@@ -98,4 +98,36 @@ form{
   transition: 0.5s;
 }
 
+#burza {
+  width: 95vw;
+  text-align: center;
+  background-color: #41493E;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+#burza:hover{
+  background-color: #2b3029;
+  transition: 0.5s;
+}
+
+.href{
+  text-decoration: none;
+  color: white;
+}
+
+#header{
+  display: flex;
+  justify-content: space-between;
+  width: 95vw;
+  margin-top: 1rem;
+  color: #f3f4f5;
+}
+
+@media (max-width: 740px) {
+  #header{
+    flex-direction: column;
+  }
+}
+
 
