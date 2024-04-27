@@ -12,7 +12,8 @@ if (!isset($_SESSION['username'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
+    <link rel="icon" href="assets/icon.png">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
@@ -23,7 +24,7 @@ if (!isset($_SESSION['username'])) {
     <?php include 'processes\luch_browse.php'; ?>
     <div class="bottomBtn"><a href="burza.php" class="href"><h1>Burza</h1></a></div>
     <?php
-    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {        // Element to show for admin role
+    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {       
         echo '<div class="bottomBtn"><a href="adminpanel.php" class="href"><h1>Admin Panel</h1></a></div>';
     }    
     ?>

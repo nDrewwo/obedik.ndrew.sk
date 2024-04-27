@@ -17,7 +17,7 @@ $sql = "INSERT INTO lunches (DATE, Choice1, Choice2) VALUES ('$date', '$choice1'
 
 // Execute the query and handle potential errors
 if (mysqli_query($conn, $sql)) {
-  echo "Lunch choices successfully added!";
+  header("Location: ../dashboard.php");
 } else {
   echo "Error: " . mysqli_error($conn);
 }

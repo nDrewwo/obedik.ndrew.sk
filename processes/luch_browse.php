@@ -43,7 +43,7 @@ if ($result->num_rows > 0) {
   echo "</div>";
   }
 } else {
-  echo "No lunches found in the database.";
+  echo '<h1 style="color: #f3f4f5;">No results found.</h1>';
 }
 
 $conn->close();
