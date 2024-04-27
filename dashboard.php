@@ -33,7 +33,12 @@ if (!isset($_SESSION['username'])) {
             </form>
         </div>
     </div>
-    <div id="burza"><a href="burza.php" class="href"><h1>Burza</h1></a></div>
+    <div class="bottomBtn"><a href="burza.php" class="href"><h1>Burza</h1></a></div>
+    <?php
+    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {        // Element to show for admin role
+        echo '<div class="bottomBtn"><a href="adminpanel.php" class="href"><h1>Admin Panel</h1></a></div>';
+    }    
+    ?>
     <script src="scripts/expand.js"></script>
     <script src="scripts/activebtn.js"></script>
     <script src="scripts/choicelogic.js"></script>

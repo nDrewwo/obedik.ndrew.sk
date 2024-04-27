@@ -98,7 +98,7 @@ form{
   transition: 0.5s;
 }
 
-#burza {
+.bottomBtn {
   width: 95vw;
   text-align: center;
   background-color: #41493E;
@@ -106,7 +106,7 @@ form{
   margin-top: 20px;
 }
 
-#burza:hover{
+.bottomBtn:hover {
   background-color: #2b3029;
   transition: 0.5s;
 }
