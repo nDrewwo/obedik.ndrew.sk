@@ -29,8 +29,7 @@ if ($conn->connect_error) {
 $sql_check = "SELECT OID FROM orders WHERE Date = ? AND RFID = ?";
 $stmt_check = $conn->prepare($sql_check);
 
-// Get current date
-$date = date('Y-m-d');
+$date = $_POST['date'] ?? date('Y-m-d'); // Use the posted date if available, otherwise use today's date
 
 // Bind parameters to the check statement
 $stmt_check->bind_param("ss", $date, $rfid);
