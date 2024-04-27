@@ -3,6 +3,11 @@
 // Start a session if not already started
 session_start();
 
+// Initialize balance if it doesn't exist
+if (!isset($_SESSION['balance'])) {
+  $_SESSION['balance'] = 0; // or any initial balance
+}
+
 // Check if RFID is present in session
 if (!isset($_SESSION['user_rfid'])) {
   die("Error: RFID not found in session");
@@ -26,7 +31,7 @@ if ($conn->connect_error) {
 }
 
 // Prepare a SQL statement to check for existing record
-$sql_check = "SELECT OID FROM orders WHERE Date = ? AND RFID = ?";
+$sql_check = "SELECT OID, CHOICE FROM orders WHERE Date = ? AND RFID = ?";
 $stmt_check = $conn->prepare($sql_check);
 
 $date = $_POST['date'] ?? date('Y-m-d'); // Use the posted date if available, otherwise use today's date
@@ -43,6 +48,16 @@ $result = $stmt_check->get_result(); // Get results from check
 if ($result->num_rows > 0) {
   $row = $result->fetch_assoc();
   $oid = $row['OID']; // Get existing order ID
+
+  // If unassigning an order, increment balance by 2
+  if ($choice == 0 && $row['CHOICE'] != 0) {
+    $_SESSION['balance'] += 2;
+  }
+
+  // If assigning an order when it was previously unassigned, decrement balance by 2
+  if ($choice != 0 && $row['CHOICE'] == 0) {
+    $_SESSION['balance'] -= 2;
+  }
 
   // Prepare update statement
   $sql_update = "UPDATE orders SET CHOICE = ? WHERE OID = ?";
@@ -63,6 +78,9 @@ if ($result->num_rows > 0) {
 } else {
   // No existing record, insert a new one
 
+  // Decrement balance by 2
+  $_SESSION['balance'] -= 2;
+
   // Prepare insert statement (same as before)
   $sql = "INSERT INTO orders (Date, RFID, CHOICE) VALUES (?, ?, ?)";
   $stmt = $conn->prepare($sql);
@@ -71,11 +89,11 @@ if ($result->num_rows > 0) {
   $stmt->bind_param("sss", $date, $rfid, $choice);
 
   // Execute insert statement
-    if ($stmt->execute()) {
+  if ($stmt->execute()) {
     echo '<meta http-equiv="refresh" content="2; url=../dashboard.php">';
-    } else {
+  } else {
     echo "Error: " . $stmt->error;
-    }
+  }
 
   // Close insert statement
   $stmt->close();
@@ -86,6 +104,8 @@ $stmt_check->close();
 $conn->close();
 
 ?>
+
+<!-- Rest of your HTML code -->
 
 <!DOCTYPE html>
 <html lang="en">
