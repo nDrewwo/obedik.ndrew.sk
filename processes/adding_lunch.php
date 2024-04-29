@@ -1,11 +1,15 @@
 <?php
 
-$conn = new mysqli("localhost", "root", "", "cafeteria_db");
+session_start();
 
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+include 'db_connection.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+      die("CSRF Token Validation Failed");
+  }
+} 
+
 
 // Get form data (assuming successful form submission)
 $date = $_POST['date'];

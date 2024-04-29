@@ -3,11 +3,6 @@
 // Start a session if not already started
 session_start();
 
-// Initialize balance if it doesn't exist
-if (!isset($_SESSION['balance'])) {
-  $_SESSION['balance'] = 0; // or any initial balance
-}
-
 // Check if RFID is present in session
 if (!isset($_SESSION['user_rfid'])) {
   die("Error: RFID not found in session");
@@ -16,19 +11,7 @@ if (!isset($_SESSION['user_rfid'])) {
 $rfid = $_SESSION['user_rfid'];
 $choice = (int)$_POST['item']; // Cast item value to integer
 
-// Database connection details (replace with your actual details)
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "cafeteria_db";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+include 'db_connection.php';
 
 // Prepare a SQL statement to check for existing record
 $sql_check = "SELECT OID, CHOICE FROM orders WHERE Date = ? AND RFID = ?";
@@ -51,12 +34,20 @@ if ($result->num_rows > 0) {
 
   // If unassigning an order, increment balance by 2
   if ($choice == 0 && $row['CHOICE'] != 0) {
-    $_SESSION['balance'] += 2;
+    $sql_balance = "UPDATE users SET Balance = Balance + 2 WHERE RFID = ?";
+    $stmt_balance = $conn->prepare($sql_balance);
+    $stmt_balance->bind_param("s", $rfid);
+    $stmt_balance->execute();
+    $stmt_balance->close();
   }
 
   // If assigning an order when it was previously unassigned, decrement balance by 2
   if ($choice != 0 && $row['CHOICE'] == 0) {
-    $_SESSION['balance'] -= 2;
+    $sql_balance = "UPDATE users SET Balance = Balance - 2 WHERE RFID = ?";
+    $stmt_balance = $conn->prepare($sql_balance);
+    $stmt_balance->bind_param("s", $rfid);
+    $stmt_balance->execute();
+    $stmt_balance->close();
   }
 
   // Prepare update statement
@@ -79,7 +70,11 @@ if ($result->num_rows > 0) {
   // No existing record, insert a new one
 
   // Decrement balance by 2
-  $_SESSION['balance'] -= 2;
+  $sql_balance = "UPDATE users SET Balance = Balance - 2 WHERE RFID = ?";
+  $stmt_balance = $conn->prepare($sql_balance);
+  $stmt_balance->bind_param("s", $rfid);
+  $stmt_balance->execute();
+  $stmt_balance->close();
 
   // Prepare insert statement (same as before)
   $sql = "INSERT INTO orders (Date, RFID, CHOICE) VALUES (?, ?, ?)";
@@ -115,7 +110,7 @@ $conn->close();
     <title>Document</title>
 </head>
 <body>
-    <h1>Spravovávam...</h1>
+    <h1>Spracovávam...</h1>
 </body>
 <style>
     @import url('https://fonts.googleapis.com/css?family=Press+Start+2P:400,700&display=swap');

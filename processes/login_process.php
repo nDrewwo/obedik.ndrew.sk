@@ -2,16 +2,13 @@
 session_start();
 
 // Connect to the database
-$conn = new mysqli("localhost", "root", "", "cafeteria_db");
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+include 'db_connection.php';
 
 // Get user input from the login form
 $username = $_POST['username'];
 $password = $_POST['password'];
+
+$token = bin2hex(random_bytes(32)); // Generate a 64-character hexadecimal token
 
 // Retrieve user data from the 'users' table
 $sql = "SELECT * FROM users WHERE username='$username'";
@@ -25,8 +22,8 @@ if ($result->num_rows > 0) {
     // Password is correct, set session variables and redirect
     $_SESSION['username'] = $username;
     $_SESSION['user_rfid'] = $row['RFID']; // Retrieve RFID from the row
-    $_SESSION['balance'] = $row['Balance']; // Retrieve balance from the row
     $_SESSION['role'] = $row['role']; // Retrieve role from the row
+    $_SESSION['token'] = $token;
     header("Location: ../dashboard.php");
     exit();
   } else {

@@ -15,12 +15,28 @@
     <link rel="stylesheet" href="css/adminpanel.css">
 </head>
 <body>
-    <h1>Pridávanie Obedov</h1>
+    <h2>Pridávanie Obedov</h2>
     <form action="processes/adding_lunch.php" method="post">
-        <label for="date">Date</label>
-        <input type="date" id="date" name="date" required>  
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
+        <label for="date">Date</label><input type="date" id="date" name="date" required>  
         <label for="choice1">Choice 1</label><input type="text" name="choice1" id="choice1" placeholder="Choice 1" required>
         <label for="choice2">Choice 2</label><input type="text" name="choice2" id="choice2" placeholder="Choice 2" required>
+        <input type="submit" value="Submit">
+    </form>
+    <h2>Promote Usera</h2>
+    <form action="processes/promote_user.php" method="post">
+        <label for="username">Username</label><input type="text" id="username" name="username" placeholder="Username">
+        <input type="submit" value="Submit">
+    </form>
+    <h2>Mazanie Usera</h2>
+    <form action="processes/delete_user.php">
+        <label for="username">Username</label><input type="text" id="username" name="username" placeholder="Username">
+        <input type="submit" value="Submit">
+    </form>
+    <h2>Pridanie Monopoly Peňazí</h2>
+    <form action="">
+        <label for="username">Username</label><input type="text" id="username" name="username" placeholder="Username">
+        <label for="sum">Sum</label><input type="number" id="sum" name="sum" placeholder="Sum">
         <input type="submit" value="Submit">
     </form>
 </body>

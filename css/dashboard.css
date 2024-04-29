@@ -100,6 +100,10 @@ form{
 
 .bottomBtn {
   width: 95vw;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   background-color: #41493E;
   border-radius: 10px;
@@ -129,6 +133,11 @@ form{
   #header{
     flex-direction: column;
   }
+}
+
+#logout{
+  background-color: #f3f4f5;
+  color: #60695C;
 }
 
 

@@ -5,6 +5,7 @@ body {
     font-family: 'Press Start 2P';
     scroll-behavior: smooth;
     display: flex;
+    flex-direction: column;
     color: #fff;
     background-color: #60695C;
     height: 100vh;
