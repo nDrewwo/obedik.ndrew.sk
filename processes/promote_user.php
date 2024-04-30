@@ -1,25 +1,30 @@
 <?php
-// File: processes/promote_user.php
+// Start the session
+session_start();
 
-include 'db_connection.php';
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if the token is valid
+    if ($_POST['token'] != $_SESSION['token']) {
+        die('Invalid CSRF token');
+    }
 
-// Get the username from the form
-$username = $_POST['username'];
+    // Get the username from the form
+    $username = $_POST['username'];
 
-// Prepare the SQL statement
-$stmt = $db->prepare("UPDATE users SET role = 'admin' WHERE Username = ?");
+    include 'db_connection.php';
 
-// Bind the username to the prepared statement
-$stmt->bind_param("s", $username);
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("UPDATE users SET role='admin' WHERE Username=?");
 
-// Execute the statement
-if ($stmt->execute()) {
-    echo "User promoted successfully.";
-} else {
-    echo "Error promoting user: " . $stmt->error;
+    // Bind the parameters
+    $stmt->bind_param("s", $username);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Close the statement and the connection
+    $stmt->close();
+    $conn->close();
 }
-
-// Close the statement and the database connection
-$stmt->close();
-$db->close();
 ?>

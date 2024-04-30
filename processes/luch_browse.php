@@ -23,6 +23,7 @@ if ($result->num_rows > 0) {
   echo "        <button type='button' class='toggle-btn option1'><h1>" . $choice1 . "</h1></button>";
   echo "        <button type='button' class='toggle-btn option2'><h1>" . $choice2 . "</h1></button>";
   echo "      </div>";
+  echo "      <input type='hidden' name='token' value='" . $_SESSION['token'] . "'>";
   echo "      <input type='hidden' name='date' value='" . $date . "'>"; // Corrected line
   echo "      <input type='hidden' name='item' value=''>";  // Corrected line
   echo "      <button type='submit' class='submitBtn'><h1>Submit</h1></button>";

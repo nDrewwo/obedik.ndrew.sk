@@ -3,6 +3,12 @@
 // Start a session if not already started
 session_start();
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+      die("CSRF Token Validation Failed");
+  }
+} 
+
 // Check if RFID is present in session
 if (!isset($_SESSION['user_rfid'])) {
   die("Error: RFID not found in session");

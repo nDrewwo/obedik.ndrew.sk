@@ -25,18 +25,8 @@
     </form>
     <h2>Promote Usera</h2>
     <form action="processes/promote_user.php" method="post">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
         <label for="username">Username</label><input type="text" id="username" name="username" placeholder="Username">
-        <input type="submit" value="Submit">
-    </form>
-    <h2>Mazanie Usera</h2>
-    <form action="processes/delete_user.php">
-        <label for="username">Username</label><input type="text" id="username" name="username" placeholder="Username">
-        <input type="submit" value="Submit">
-    </form>
-    <h2>Pridanie Monopoly Peňazí</h2>
-    <form action="">
-        <label for="username">Username</label><input type="text" id="username" name="username" placeholder="Username">
-        <label for="sum">Sum</label><input type="number" id="sum" name="sum" placeholder="Sum">
         <input type="submit" value="Submit">
     </form>
 </body>
