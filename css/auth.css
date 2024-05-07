@@ -35,7 +35,7 @@ body {
 #leftcontent {
     display: flex;
     height: 90vh;
-    justify-content: center;     
+    justify-content: center;
     padding-left: 1rem;
     flex-direction: column;
 }
@@ -57,7 +57,7 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.1s ease; 
+    transition: background-color 0.1s ease;
 }
 
 .href {
@@ -78,19 +78,38 @@ button:hover {
     white-space: nowrap; /* Keeps the content on a single line */
     margin: 0 auto; /* Gives that scrolling effect as the typing happens */
     letter-spacing: .15em; /* Adjust as needed */
-    animation: 
+    animation:
       typing 2.5s steps(30, end),
       blink-caret .5s step-end infinite;
   }
-  
+
   /* The typing effect */
   @keyframes typing {
     from { width: 0 }
     to { width: 85% }
   }
-  
+
   /* The typewriter cursor effect */
   @keyframes blink-caret {
     from, to { border-color: transparent }
     50% { border-color: #fff }
   }
+
+  @media (max-width: 1275px) {
+    #left {
+      display: none;
+    }
+    #right {
+      width: 100vw;
+    }
+  }
+
+  @media (max-width: 500px) {
+    #buttoncontainer {
+      flex-direction: column;
+    }
+    button{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
