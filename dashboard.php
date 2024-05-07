@@ -19,9 +19,9 @@ if(!isset($_SESSION['username'])){
 <body>
     <div id="header">
         <h2>Ahoj, <?php echo $_SESSION['username']; ?>!</h2>
-        <?php include 'processes\fetch_balance.php'; ?>
+        <?php include '/processes/fetch_balance.php'; ?>
     </div>
-    <?php include 'processes\luch_browse.php'; ?>
+    <?php include '/processes/luch_browse.php'; ?>
     <a href="burza.php" class="href"><div class="bottomBtn"><h1>Burza</h1></div></a>
     <?php
     if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {       
