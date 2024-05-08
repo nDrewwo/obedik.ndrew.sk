@@ -110,3 +110,25 @@ img {
     margin: 10px;
     border-radius: 15px;
 }
+
+@media (max-width: 768px) {
+    #buttoncontainer {
+        flex-direction: column;
+    }
+    .button {
+        width: 75vw;
+    }
+    #aboutus {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #about {
+        width: 100%;
+    }
+
+    img{
+        width: 90vw;
+    }
+}

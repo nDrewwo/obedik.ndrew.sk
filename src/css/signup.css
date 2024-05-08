@@ -61,3 +61,13 @@ input[type="submit"]:hover {
     color: white;
 }   
 
+.error{
+    margin-top: 25px;
+}
+
+@media (max-width: 768px){
+    #content{
+        width: 80vw;
+    }
+}
+
