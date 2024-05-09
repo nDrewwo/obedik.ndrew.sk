@@ -72,25 +72,25 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up</title>
-    <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/form.css">
 </head>
 <body>
     <div id="content">
         <h2>Create your account</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <label for="rfid" class="sr-only">RFID</label>
-        <input type="rfid" name="rfid" id="rfid" placeholder="RFID" required>
+            <label for="rfid" class="sr-only">RFID</label>
+            <input type="rfid" name="rfid" id="rfid" placeholder="RFID" required>
 
-        <label for="username" class="sr-only">Username</label>
-        <input type="text" name="username" id="username" placeholder="Username" required>
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username" required>
 
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" name="password" id="password" placeholder="Password" required>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" required>
 
-        <input type="submit" value="Sign up">
-        <?php if (!empty($errorMessage)) { ?>
-        <div class="error"><?php echo $errorMessage; ?></div>
-        <?php } ?>
+            <input type="submit" value="Sign up">
+            <?php if (!empty($errorMessage)) { ?>
+            <div class="error"><?php echo $errorMessage; ?></div>
+            <?php } ?>
         </form>
         <p>Already have an account? <a href="login.html" class="href">Log in</a></p>
     </div>

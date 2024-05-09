@@ -57,7 +57,8 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Log in</title>
     <link rel="icon" href="assets/icon.png">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/form.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div id="content">
