@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Include database connection file
 require_once('processes/db_connection.php');  // Replace 'db_connect.php' with your actual file
 
@@ -54,7 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO users (RFID, Username, Password) VALUES ('$rfid', '$username', '$hashedPassword')";
         if (mysqli_query($conn, $sql)) {
         // Registration successful, redirect to login page (or display success message)
-        header("Location: login.html");
+
+        //set session variables before redirecting
+        $_SESSION['username'] = $username;
+        $_SESSION['user_rfid'] = $row['RFID']; // Retrieve RFID from the row
+        $_SESSION['role'] = $row['role']; // Retrieve role from the row
+
+        // Generate a 64-character hexadecimal token (optional)
+        $token = bin2hex(random_bytes(32));
+        $_SESSION['token'] = $token;
+
+        header("Location: dashboard.php");
         } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -92,7 +104,7 @@ mysqli_close($conn);
             <div class="error"><?php echo $errorMessage; ?></div>
             <?php } ?>
         </form>
-        <p>Already have an account? <a href="login.html" class="href">Log in</a></p>
+        <p>Already have an account? <a href="login.php" class="href">Log in</a></p>
     </div>
 </body>
 </html>

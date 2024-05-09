@@ -76,6 +76,7 @@ $conn->close();
             <div class="error"><?php echo $errorMessage; ?></div>
             <?php } ?>
         </form>
+        <p>Already have an account? <a href="signup.php" class="href">Sign up</a></p>
     </div>
 </body>
 </html>
