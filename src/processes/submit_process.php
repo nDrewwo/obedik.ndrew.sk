@@ -7,16 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
       die("CSRF Token Validation Failed");
   }
-} 
+}
 
 // Check if RFID is present in session
 if (!isset($_SESSION['user_rfid'])) {
   die("Error: RFID not found in session");
 }
-
-
-// Initialize error message
-$errorMessage = "";
 
 $rfid = $_SESSION['user_rfid'];
 $choice = (int)$_POST['item']; // Cast item value to integer
@@ -53,26 +49,11 @@ if ($result->num_rows > 0) {
 
   // If assigning an order when it was previously unassigned, decrement balance by 2
   if ($choice != 0 && $row['CHOICE'] == 0) {
-    // Check the current balance
-    $sql_check_balance = "SELECT Balance FROM users WHERE RFID = ?";
-    $stmt_check_balance = $conn->prepare($sql_check_balance);
-    $stmt_check_balance->bind_param("s", $rfid);
-    $stmt_check_balance->execute();
-    $result_check_balance = $stmt_check_balance->get_result();
-    $row_check_balance = $result_check_balance->fetch_assoc();
-    $current_balance = $row_check_balance['Balance'];
-    $stmt_check_balance->close();
-
-    // If the balance is greater than or equal to 2, proceed with the update
-    if ($current_balance >= 2) {
-      $sql_balance = "UPDATE users SET Balance = Balance - 2 WHERE RFID = ?";
-      $stmt_balance = $conn->prepare($sql_balance);
-      $stmt_balance->bind_param("s", $rfid);
-      $stmt_balance->execute();
-      $stmt_balance->close();
-    } else {
-      $errorMessage .= "Insufficient balance <br>";
-    }
+    $sql_balance = "UPDATE users SET Balance = Balance - 2 WHERE RFID = ?";
+    $stmt_balance = $conn->prepare($sql_balance);
+    $stmt_balance->bind_param("s", $rfid);
+    $stmt_balance->execute();
+    $stmt_balance->close();
   }
 
   // Prepare update statement
