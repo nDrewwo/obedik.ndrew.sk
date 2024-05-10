@@ -21,8 +21,10 @@ if(!isset($_SESSION['username'])){
         <h2>Ahoj, <?php echo $_SESSION['username']; ?>!</h2>
         <?php include 'processes/fetch_balance.php'; ?>
     </div>
+    <?php if (!empty($errorMessage)) { ?>
+            <div class="error"><?php echo $errorMessage; ?></div>
+    <?php } ?>
     <?php include 'processes/luch_browse.php'; ?>
-    <a href="burza.php" class="href"><div class="bottomBtn"><h1>Burza</h1></div></a>
     <?php
     if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {       
         echo '<a href="adminpanel.php" class="href"><div class="bottomBtn"><h1>Admin Panel</h1></div></a>';

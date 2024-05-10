@@ -4,10 +4,10 @@ session_start();
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the token is valid
-    if ($_POST['token'] != $_SESSION['token']) {
-        die('Invalid CSRF token');
+    if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+        die("CSRF Token Validation Failed");
     }
+} 
 
     // Get the username from the form
     $username = $_POST['username'];

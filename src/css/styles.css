@@ -116,12 +116,17 @@ img {
         flex-direction: column;
     }
     .button {
-        width: 75vw;
+        width: 84vw;
     }
     #aboutus {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        height: fit-content;
+    }
+
+    #about h2{
+        margin-top: 30px
     }
 
     #about {
