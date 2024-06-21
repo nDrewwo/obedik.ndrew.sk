@@ -90,7 +90,7 @@ app.post('/login', async (req, res) => {
             return res.status(401).send({ message: 'Invalid username or password' });
         }
 
-        const token = jwt.sign({ UID: user.UID, Username: user.Username }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ UID: user.UID, Username: user.Username, rfid: user.RFID }, secretKey, { expiresIn: '1h' });
         res.send({ token });
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -114,13 +114,13 @@ function authenticateToken(req, res, next) {
 // Dashboard endpoint
 app.get('/dashboard', authenticateToken, async (req, res) => {
     try {
-        const rows = await req.dbConn.query("SELECT Balance, Username, Email FROM users WHERE UID = ?", [req.user.UID]);
+        const rows = await req.dbConn.query("SELECT Balance, Username FROM users WHERE UID = ?", [req.user.UID]);
         if (rows.length === 0) {
             return res.status(404).send({ message: 'User not found' });
         }
 
         const user = rows[0];
-        res.send({ username: user.Username, balance: user.Balance, email: user.Email});
+        res.send({ username: user.Username, balance: user.Balance});
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
@@ -139,7 +139,7 @@ app.get('/lunches',  async (req, res) => {
 // Orders endpoint
 app.get('/orders', authenticateToken, async (req, res) => {
     try {
-        const rows = await req.dbConn.query("SELECT DATE_FORMAT(DATE, '%Y-%m-%d') as Date, CHOICE  FROM orders WHERE Username = ?", [req.user.Username]);
+        const rows = await req.dbConn.query("SELECT DATE_FORMAT(DATE, '%Y-%m-%d') as Date, CHOICE  FROM orders WHERE RFID = ?", [req.user.rfid]);
         res.json(rows);
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -163,8 +163,13 @@ app.post('/check', async (req, res) => {
 
         const order = rows[0];
         res.json({ choice: order.CHOICE });
-    } catch (err) {
-        res.status(500).send({ message: err.message });
+
+        // After sending the choice, delete the record
+        await req.dbConn.query("DELETE FROM orders WHERE RFID = ? AND DATE = ?", [rfid, today]);
+    } catch (error) {
+        // Handle potential errors
+        console.error("Error during order retrieval or deletion:", error);
+        res.status(500).send({ message: 'Internal server error' });
     }
 });
 
