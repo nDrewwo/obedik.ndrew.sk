@@ -146,6 +146,28 @@ app.get('/orders', authenticateToken, async (req, res) => {
     }
 });
 
+// Add RFID-based order retrieval endpoint
+app.post('/check', async (req, res) => {
+    const { rfid } = req.body;
+    if (!rfid) {
+        return res.status(400).send({ message: 'RFID is required' });
+    }
+
+    const today = new Date().toISOString().slice(0, 10); // Format today's date as YYYY-MM-DD
+
+    try {
+        const rows = await req.dbConn.query("SELECT CHOICE FROM orders WHERE RFID = ? AND DATE = ?", [rfid, today]);
+        if (rows.length === 0) {
+            return res.status(404).send({ message: 'No order found for today with the provided RFID' });
+        }
+
+        const order = rows[0];
+        res.json({ choice: order.CHOICE });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
 });
