@@ -83,6 +83,58 @@ async function loadLunches(lunches, orders, dashboardData) {
             }
         });
     });
+
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent the default form submission
+    
+            const itemInput = this.querySelector('input[name="item"]');
+            const dateInput = this.querySelector('input[name="date"]');
+            const rfidInput = this.querySelector('input[name="rfid"]');
+            const activeButton = this.querySelector('.toggle-btn.active');
+    
+            if (!activeButton) {
+                itemInput.value = '0'; // Ensure 'item' value is '0' if no option is selected
+                // Optionally, alert the user to select an option
+                alert('Please select an option before submitting.');
+                return; // Exit the function
+            }
+    
+            // Prepare the data to be sent
+            const formData = {
+                date: dateInput.value,
+                rfid: rfidInput.value,
+                item: itemInput.value
+            };
+    
+            try {
+                // Send the data to the API endpoint
+                const response = await fetch(`${api}/submitOrder`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Include authorization header if needed
+                        // 'Authorization': 'Bearer ' + YOUR_TOKEN
+                    },
+                    body: JSON.stringify(formData)
+                });
+    
+                if (response.ok) {
+                    // Handle success
+                    const result = await response.json();
+                    console.log('Submission successful', result);
+                    alert('Submission successful!');
+                } else {
+                    // Handle errors
+                    console.error('Submission failed');
+                    alert('Failed to submit data.');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    });
 }
 
 async function fetchData() {

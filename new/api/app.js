@@ -173,6 +173,22 @@ app.post('/check', async (req, res) => {
     }
 });
 
+// Add an endpoint for form submission to create an order
+app.post('/submitOrder', async (req, res) => {
+    const { date, rfid, item } = req.body;
+    if (!date || !rfid || !item) {
+        return res.status(400).send({ message: 'Date, RFID, and item choice are required' });
+    }
+
+    try {
+        await req.dbConn.query("INSERT INTO orders (Date, RFID, CHOICE) VALUES (?, ?, ?)", [date, rfid, item]);
+        res.status(201).send({ message: 'Order submitted successfully' });
+    } catch (err) {
+        console.error("Error submitting order:", err);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+});
+
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
 });
