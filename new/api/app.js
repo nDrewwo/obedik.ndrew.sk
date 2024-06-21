@@ -36,7 +36,7 @@ async function getConnection() {
     return conn;
 }
 
-app.use(cors());
+app.use(cors({}));
 app.use(express.json());
 
 app.use(async (req, res, next) => {
@@ -57,14 +57,14 @@ app.use((req, res, next) => {
 
 // Registration endpoint
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        return res.status(400).send({ message: 'Username and password are required' });
+    const { username, password, email } = req.body;
+    if (!username || !password  || !email) {
+        return res.status(400).send({ message: 'Username, password email are required' });
     }
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await req.dbConn.query("INSERT INTO users (Username, Password) VALUES (?, ?)", [username, hashedPassword]);
+        await req.dbConn.query("INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)", [username, hashedPassword, email]);
         res.status(201).send({ message: 'User registered successfully' });
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -114,20 +114,20 @@ function authenticateToken(req, res, next) {
 // Dashboard endpoint
 app.get('/dashboard', authenticateToken, async (req, res) => {
     try {
-        const rows = await req.dbConn.query("SELECT Balance, Username FROM users WHERE UID = ?", [req.user.UID]);
+        const rows = await req.dbConn.query("SELECT Balance, Username, Email FROM users WHERE UID = ?", [req.user.UID]);
         if (rows.length === 0) {
             return res.status(404).send({ message: 'User not found' });
         }
 
         const user = rows[0];
-        res.send({ username: user.Username, balance: user.Balance });
+        res.send({ username: user.Username, balance: user.Balance, email: user.Email});
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
 });
 
 // Example protected endpoint
-app.get('/lunches', authenticateToken, async (req, res) => {
+app.get('/lunches',  async (req, res) => {
     try {
         const rows = await req.dbConn.query("SELECT LID, DATE_FORMAT(DATE, '%Y-%m-%d') as DATE, Choice1, Choice2 FROM lunches");
         res.json(rows);

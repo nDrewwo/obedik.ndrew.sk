@@ -1,46 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="icon" href="assets/icon.png">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <div id="dashboard"></div>
-
-    <script>
-        async function loadDashboard() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                alert('You need to login first');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            const response = await fetch('http://localhost:3000/dashboard', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                document.getElementById('dashboard').innerHTML = `
-                    <p>Username: ${data.username}</p>
-                    <p>Balance: $${data.balance}</p>
-                `;
-            } else {
-                const data = await response.json();
-                alert(data.message);
-                if (data.message === 'Invalid token') {
-                    localStorage.removeItem('token');
-                    window.location.href = 'login.html';
-                }
-            }
-        }
-
-        window.onload = loadDashboard;
-    </script>
+    <div id="header"></div>
+    <div id="lunches-container"></div>
+    <script src="scripts/fetch.js"></script>
 </body>
 </html>
