@@ -129,7 +129,17 @@ app.get('/dashboard', authenticateToken, async (req, res) => {
 // Example protected endpoint
 app.get('/lunches',  async (req, res) => {
     try {
-        const rows = await req.dbConn.query("SELECT LID, DATE_FORMAT(DATE, '%Y-%m-%d') as DATE, Choice1, Choice2 FROM lunches");
+        const rows = await req.dbConn.query("SELECT DATE_FORMAT(DATE, '%Y-%m-%d') as DATE, Choice1, Choice2 FROM lunches");
+        res.json(rows);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
+// Orders endpoint
+app.get('/orders', authenticateToken, async (req, res) => {
+    try {
+        const rows = await req.dbConn.query("SELECT DATE_FORMAT(DATE, '%Y-%m-%d') as Date, CHOICE  FROM orders WHERE Username = ?", [req.user.Username]);
         res.json(rows);
     } catch (err) {
         res.status(500).send({ message: err.message });

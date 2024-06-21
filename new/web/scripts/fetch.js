@@ -43,22 +43,37 @@ async function loadLunches() {
         }
     });
 
-    if (response.ok) {
+    // Fetch orders
+    const ordersResponse = await fetch(`${api}/orders`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    });
+
+    if (response.ok && ordersResponse.ok) {
         const lunches = await response.json();
+        const orders = await ordersResponse.json();
         const container = document.getElementById('lunches-container');
         lunches.forEach(lunch => {
             const lunchDiv = document.createElement('div');
             lunchDiv.className = 'obedik';
+
+            // Check if an order exists for this lunch
+            const order = orders.find(order => order.Date === lunch.DATE);
+            const choice = order ? order.CHOICE : 0;
+
             lunchDiv.innerHTML = `
                 <button class='collapsible'><h1>${lunch.DATE}</h1></button>
                 <div class='content'>
                     <form action='' method='post'>
                         <div class='toggle'>
-                            <button type='button' class='toggle-btn option1'><h1>${lunch.Choice1}</h1></button>
-                            <button type='button' class='toggle-btn option2'><h1>${lunch.Choice2}</h1></button>
+                        <button type='button' class='toggle-btn option1 ${choice === 1 ? 'active' : ''}'><h1>${lunch.Choice1}</h1></button>
+                        <button type='button' class='toggle-btn option2${choice === 2 ? 'active' : ''}'><h1>${lunch.Choice2}</h1></button>
                         </div>
                         <input type='hidden' name='date' value='${lunch.DATE}'>
-                        <input type='hidden' name='item' value=''>
+                        <input type='hidden' name='item' value='${choice}'>
                         <button type='submit' class='submitBtn'><h1>Submit</h1></button>
                     </form>
                 </div>
@@ -118,4 +133,24 @@ async function loadLunches() {
     }
 }
 
-window.onload = loadDashboard;
+async function loadOrders() {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${api}/orders`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    });
+
+    if (response.ok) {
+        const orders = await response.json();
+    } else {
+        alert('Failed to load orders');
+    }
+}
+
+window.onload = function() {
+    loadDashboard();
+    loadOrders();
+};
