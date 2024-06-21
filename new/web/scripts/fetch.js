@@ -1,63 +1,17 @@
-const api = "http://localhost:3000"
+const api = "http://localhost:3000";
 
-async function loadDashboard() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert('You need to login first');
-        window.location.href = 'login.html';
-        return;
-    }
-
-    const response = await fetch(`${api}/dashboard`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        document.querySelector('#header').innerHTML = `
-            <h2>Welcome, ${data.username}!</h2>
-            <h2>Balance, ${data.balance}$</h2>
-        `;
-        loadLunches();
-    } else {
-        const data = await response.json();
-        alert(data.message);
-        if (data.message === 'Invalid token') {
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
-        }
-    }
+async function loadDashboard(dashboardData) {
+    document.querySelector('#header').innerHTML = `
+        <h2>Welcome, ${dashboardData.username}!</h2>
+        <h2>Balance, ${dashboardData.balance}$</h2>
+    `;
 }
 
-async function loadLunches() {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${api}/lunches`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }
-    });
-
-    // Fetch orders
-    const ordersResponse = await fetch(`${api}/orders`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }
-    });
-
-    if (response.ok && ordersResponse.ok) {
-        const lunches = await response.json();
-        const orders = await ordersResponse.json();
-        const container = document.getElementById('lunches-container');
-        lunches.forEach(lunch => {
-            const lunchDiv = document.createElement('div');
+async function loadLunches(lunches, orders, dashboardData) {
+    // Use the passed data instead of fetching again
+    const container = document.getElementById('lunches-container');
+    lunches.forEach(lunch => {
+        const lunchDiv = document.createElement('div');
             lunchDiv.className = 'obedik';
 
             // Check if an order exists for this lunch
@@ -73,84 +27,109 @@ async function loadLunches() {
                         <button type='button' class='toggle-btn option2${choice === 2 ? 'active' : ''}'><h1>${lunch.Choice2}</h1></button>
                         </div>
                         <input type='hidden' name='date' value='${lunch.DATE}'>
+                        <input type='hidden' name='rfid' value='${dashboardData.rfid}'>
                         <input type='hidden' name='item' value='${choice}'>
                         <button type='submit' class='submitBtn'><h1>Submit</h1></button>
                     </form>
                 </div>
             `;
             container.appendChild(lunchDiv);
-        });
-
-        document.querySelectorAll('.collapsible').forEach(button => {
-            button.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                content.classList.toggle('open');
-            });
-        });
-
-        document.querySelectorAll('.toggle-btn').forEach((button) => {
-            button.addEventListener('click', function() {
-                const form = this.closest('form');
-                const itemInput = form.querySelector('input[name="item"]');
-        
-                // If this button is already active, deselect it and set 'item' value to '0'
-                if (this.classList.contains('active')) {
-                    this.classList.remove('active');
-                    itemInput.value = '0';
-                } else {
-                    // Remove 'active' class from all buttons
-                    document.querySelectorAll('.toggle-btn.active').forEach(activeButton => {
-                        activeButton.classList.remove('active');
-                    });
-        
-                    // Add 'active' class to the clicked button
-                    this.classList.add('active');
-        
-                    // Set the value of the 'item' input field based on the clicked button
-                    if (this.classList.contains('option1')) {
-                        itemInput.value = '1'; // '1' for the first button
-                    } else if (this.classList.contains('option2')) {
-                        itemInput.value = '2'; // '2' for the second button
-                    }
-                }
-            });
-        });
-        
-        // Add an event listener to the form to set the 'item' value to '0' if no option is selected
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                const itemInput = this.querySelector('input[name="item"]');
-                const activeButton = this.querySelector('.toggle-btn.active');
-        
-                if (!activeButton) {
-                    itemInput.value = '0';
-                    e.preventDefault(); // Prevent form submission if no option is selected
-                }
-            });
-        });
-    } else {
-        alert('Failed to load lunches');
-    }
-}
-
-async function loadOrders() {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${api}/orders`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }
     });
 
-    if (response.ok) {
-        const orders = await response.json();
-    } else {
-        alert('Failed to load orders');
+    document.querySelectorAll('.collapsible').forEach(button => {
+        button.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            content.classList.toggle('open');
+        });
+    });
+
+    document.querySelectorAll('.toggle-btn').forEach((button) => {
+        button.addEventListener('click', function() {
+            const form = this.closest('form');
+            const itemInput = form.querySelector('input[name="item"]');
+    
+            // If this button is already active, deselect it and set 'item' value to '0'
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+                itemInput.value = '0';
+            } else {
+                // Remove 'active' class from all buttons
+                document.querySelectorAll('.toggle-btn.active').forEach(activeButton => {
+                    activeButton.classList.remove('active');
+                });
+    
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+    
+                // Set the value of the 'item' input field based on the clicked button
+                if (this.classList.contains('option1')) {
+                    itemInput.value = '1'; // '1' for the first button
+                } else if (this.classList.contains('option2')) {
+                    itemInput.value = '2'; // '2' for the second button
+                }
+            }
+        });
+    });
+    
+    // Add an event listener to the form to set the 'item' value to '0' if no option is selected
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const itemInput = this.querySelector('input[name="item"]');
+            const activeButton = this.querySelector('.toggle-btn.active');
+    
+            if (!activeButton) {
+                itemInput.value = '0';
+                e.preventDefault(); // Prevent form submission if no option is selected
+            }
+        });
+    });
+}
+
+async function fetchData() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('You need to login first');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const dashboardResponse = await fetch(`${api}/dashboard`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        const lunchResponse = await fetch(`${api}/lunches`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        const ordersResponse = await fetch(`${api}/orders`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        if (dashboardResponse.ok && lunchResponse.ok && ordersResponse.ok) {
+            const dashboardData = await dashboardResponse.json();
+            const lunches = await lunchResponse.json();
+            const orders = await ordersResponse.json();
+
+            loadDashboard(dashboardData);
+            loadLunches(lunches, orders, dashboardData);
+        } else {
+            alert('Failed to load data');
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('An error occurred while fetching data.');
     }
 }
 
-window.onload = function() {
-    loadDashboard();
-    loadOrders();
-};
+window.onload = fetchData;

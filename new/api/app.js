@@ -114,13 +114,13 @@ function authenticateToken(req, res, next) {
 // Dashboard endpoint
 app.get('/dashboard', authenticateToken, async (req, res) => {
     try {
-        const rows = await req.dbConn.query("SELECT Balance, Username FROM users WHERE UID = ?", [req.user.UID]);
+        const rows = await req.dbConn.query("SELECT Balance, Username, RFID FROM users WHERE UID = ?", [req.user.UID]);
         if (rows.length === 0) {
             return res.status(404).send({ message: 'User not found' });
         }
 
         const user = rows[0];
-        res.send({ username: user.Username, balance: user.Balance});
+        res.send({ username: user.Username, balance: user.Balance, rfid: user.RFID});
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
@@ -139,7 +139,7 @@ app.get('/lunches',  async (req, res) => {
 // Orders endpoint
 app.get('/orders', authenticateToken, async (req, res) => {
     try {
-        const rows = await req.dbConn.query("SELECT DATE_FORMAT(DATE, '%Y-%m-%d') as Date, CHOICE  FROM orders WHERE RFID = ?", [req.user.rfid]);
+        const rows = await req.dbConn.query("SELECT DATE_FORMAT(DATE, '%Y-%m-%d') as Date, CHOICE FROM orders WHERE RFID = ?", [req.user.rfid]);
         res.json(rows);
     } catch (err) {
         res.status(500).send({ message: err.message });
