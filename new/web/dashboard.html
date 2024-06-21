@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div id="dashboard"></div>
+
+    <script>
+        async function loadDashboard() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('You need to login first');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/dashboard', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('dashboard').innerHTML = `
+                    <p>Username: ${data.username}</p>
+                    <p>Balance: $${data.balance}</p>
+                `;
+            } else {
+                const data = await response.json();
+                alert(data.message);
+                if (data.message === 'Invalid token') {
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+
+        window.onload = loadDashboard;
+    </script>
+</body>
+</html>

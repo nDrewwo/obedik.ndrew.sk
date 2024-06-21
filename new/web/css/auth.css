@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P:400,700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Press Start 2P';
+    scroll-behavior: smooth;
+    display: flex;
+    color: #fff;
+}
+
+#left {
+    height: 100vh;
+    width: 55vw;
+    background-color: #60695C;
+    display: flex;
+    flex-direction: column;
+}
+
+#right {
+    height: 100vh;
+    width: 45vw;
+    background-color: #41493E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#top {
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    height: 10vh;
+}
+
+#leftcontent {
+    display: flex;
+    height: 90vh;
+    justify-content: center;
+    padding-left: 1rem;
+    flex-direction: column;
+}
+
+#buttoncontainer {
+    display: flex;
+    flex-direction: row;
+}
+
+button {
+    background-color: #60695C;
+    color: #fff;
+    font-family: 'Press Start 2P';
+    border: none;
+    border-radius: 10px;
+    height: 3rem;
+    width: 12rem;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s ease;
+}
+
+.href {
+    text-decoration: none;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #31392d;
+}
+
+  /* DEMO-SPECIFIC STYLES */
+  .typewriter h1 {
+    display: inline-block;
+    color: #fff;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid #fff; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .15em; /* Adjust as needed */
+    animation:
+      typing 2.5s steps(30, end),
+      blink-caret .5s step-end infinite;
+  }
+
+  /* The typing effect */
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 85% }
+  }
+
+  /* The typewriter cursor effect */
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #fff }
+  }
+
+  @media (max-width: 1275px) {
+    #left {
+      display: none;
+    }
+    #right {
+      width: 100vw;
+    }
+  }
+
+  @media (max-width: 500px) {
+    #buttoncontainer {
+      flex-direction: column;
+    }
+    button{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

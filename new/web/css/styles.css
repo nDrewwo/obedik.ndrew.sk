@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P:400,700&display=swap');
+
+body {
+    color: #f3f4f5;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: 'Press Start 2P';
+}
+
+#hero {
+    background-color: #60695C;
+    height: 100vh;
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+#content h1 {
+    font-size: 4rem;
+    margin-bottom: 30px;
+}
+
+#content p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.href {
+    text-decoration: none;
+    color: #f3f4f5;
+}
+
+#buttoncontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    width: 25vw;
+    padding: 1rem;
+    font-size: 1.5rem;
+    margin: 10px;
+}
+
+#ab{
+    color: #f3f4f5;
+    background-color: #41493E;
+    border: 3px solid #f3f4f5;
+    border-radius: 15px;
+}
+
+#au{
+    color: #41493E;
+    background-color: #f3f4f5;
+    border: 3px solid #41493E;
+    border-radius: 15px;
+}
+
+#aboutus {
+    height: 100vh;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    background-color: #41493E;
+}
+
+#about{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#about h2{
+    font-size: 2.5rem;
+    margin: 15px;
+}
+
+#about p{
+    font-size: 1rem;
+    margin: 15px;
+
+}
+
+#images {
+    width: 50%;
+}
+
+#images {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+img {
+    width: 60%;
+    aspect-ratio: 16/9;
+    margin: 10px;
+    border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+    #buttoncontainer {
+        flex-direction: column;
+    }
+    .button {
+        width: 84vw;
+    }
+    #aboutus {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+    }
+
+    #about h2{
+        margin-top: 30px
+    }
+
+    #about {
+        width: 100%;
+    }
+
+    img{
+        width: 90vw;
+    }
+}
