@@ -3,7 +3,7 @@ const api = "http://localhost:3000";
 async function loadDashboard(dashboardData) {
     document.querySelector('#header').innerHTML = `
         <h2>Welcome, ${dashboardData.username}!</h2>
-        <h2>Balance, ${dashboardData.balance}$</h2>
+        <h2>Balance: ${dashboardData.balance}$</h2>
     `;
 }
 
@@ -24,7 +24,7 @@ async function loadLunches(lunches, orders, dashboardData) {
                     <form action='' method='post'>
                         <div class='toggle'>
                         <button type='button' class='toggle-btn option1 ${choice === 1 ? 'active' : ''}'><h1>${lunch.Choice1}</h1></button>
-                        <button type='button' class='toggle-btn option2${choice === 2 ? 'active' : ''}'><h1>${lunch.Choice2}</h1></button>
+                        <button type='button' class='toggle-btn option2 ${choice === 2 ? 'active' : ''}'><h1>${lunch.Choice2}</h1></button>
                         </div>
                         <input type='hidden' name='date' value='${lunch.DATE}'>
                         <input type='hidden' name='rfid' value='${dashboardData.rfid}'>
