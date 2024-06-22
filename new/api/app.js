@@ -189,6 +189,33 @@ app.post('/submitOrder', async (req, res) => {
     }
 });
 
+app.get('/burza', async (req, res) => {
+    const today = new Date().toISOString().slice(0, 10); // Format today's date as YYYY-MM-DD
+
+    try {
+        // Query to count entries for each choice for today's date
+        const query = `
+            SELECT 
+                SUM(CASE WHEN choice = 1 THEN 1 ELSE 0 END) AS countOfChoice1,
+                SUM(CASE WHEN choice = 2 THEN 1 ELSE 0 END) AS countOfChoice2
+            FROM burza
+            WHERE date = ?`;
+
+        const rows = await req.dbConn.query(query, [today]);
+
+        if (rows.length === 0) {
+            // If no entries found for today
+            return res.status(404).send({ message: 'No entries found for today' });
+        }
+
+        const { countOfChoice1, countOfChoice2 } = rows[0];
+        res.json({ countOfChoice1, countOfChoice2 });
+    } catch (err) {
+        console.error("Error retrieving today's entries from burza:", err);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+});
+
 app.listen(port, () => {
     console.log(`API running on http://localhost:${port}`);
 });
