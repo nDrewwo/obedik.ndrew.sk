@@ -55,22 +55,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Registration endpoint
-app.post('/register', async (req, res) => {
-    const { username, password, email } = req.body;
-    if (!username || !password  || !email) {
-        return res.status(400).send({ message: 'Username, password email are required' });
-    }
-
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await req.dbConn.query("INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)", [username, hashedPassword, email]);
-        res.status(201).send({ message: 'User registered successfully' });
-    } catch (err) {
-        res.status(500).send({ message: err.message });
-    }
-});
-
 // Login endpoint
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -94,6 +78,79 @@ app.post('/login', async (req, res) => {
         res.send({ token });
     } catch (err) {
         res.status(500).send({ message: err.message });
+    }
+});
+
+// Registration endpoint
+app.post('/register', async (req, res) => {
+    const { username, password, email } = req.body;
+
+    // Initialize an object to hold potential errors
+    let errors = {};
+
+    // Check if all fields are provided
+    if (!username || !password || !email) {
+        errors.fields = 'Username, password, and email are required';
+    }
+
+    // Check if the password is strong enough
+    let passwordErrors = [];
+    const minLengthRegex = /.{8,}/;
+    const digitRegex = /.*\d.*/;
+    const uppercaseRegex = /.*[A-Z].*/;
+    const lowercaseRegex = /.*[a-z].*/;
+    const specialCharRegex = /.*\W.*/;
+
+    if (!minLengthRegex.test(password)) passwordErrors.push("at least 8 characters");
+    if (!digitRegex.test(password)) passwordErrors.push("one digit");
+    if (!uppercaseRegex.test(password)) passwordErrors.push("one uppercase letter");
+    if (!lowercaseRegex.test(password)) passwordErrors.push("one lowercase letter");
+    if (!specialCharRegex.test(password)) passwordErrors.push("one special character");
+
+    if (passwordErrors.length > 0) {
+        errors.password = `Password is not strong enough. It needs ${passwordErrors.join(", ")}.`;
+    }
+
+    // Check if the email is in correct format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        errors.email = 'Email is not valid';
+    }
+
+    // If there are any errors so far, return them
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ success: false, errors });
+    }
+
+    try {
+        // Check if username or email already exists
+        const existingUser = await req.dbConn.query("SELECT * FROM users WHERE Username = ? OR Email = ?", [username, email]);
+        if (existingUser.length > 0) {
+            errors.existingUser = 'Username or email already in use';
+            return res.status(400).json({ success: false, errors });
+        }
+
+        // If all checks pass, hash the password and insert the new user
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await req.dbConn.query("INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)", [username, hashedPassword, email]);
+
+        // Retrieve the newly registered user's full record to get their UID and any other necessary fields
+        const newUser = await req.dbConn.query("SELECT * FROM users WHERE Username = ?", [username]);
+        if (newUser.length === 0) {
+            throw new Error('User registration successful, but unable to retrieve user data.');
+        }
+        const user = newUser[0];
+
+    // Generate the token with the same payload structure as in the login endpoint
+    // Adjust the payload as necessary based on the available data
+    const token = jwt.sign({ UID: user.UID, Username: user.Username, rfid: user.RFID }, secretKey, { expiresIn: '1h' });
+
+    // Respond with the toke
+
+        // Respond with the token
+        res.status(201).json({ success: true, message: 'User registered successfully', token });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
     }
 });
 
