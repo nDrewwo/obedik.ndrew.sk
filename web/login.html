@@ -1,21 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up</title>
-    <link rel="stylesheet" href="css/form.css">
+    <title>Log In</title>
+    <link rel="icon" href="data/assets/icon.png">
 </head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Press+Start+2P:400,700&display=swap');
+
+    body {
+        margin: 0;
+        font-family: 'Press Start 2P';
+        scroll-behavior: smooth;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        background-color: #60695C;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 35vw;
+    }
+
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    label {
+        display: none; 
+    }
+
+    input {
+        box-sizing: border-box;
+        width: 100%;
+        font-family:'Press Start 2P';
+        padding: 10px;
+        margin: 5px;
+        border-radius: 5px;
+        border: 1px solid white; 
+        background-color: transparent; 
+        color: white; 
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #41493E;
+        color: white;
+        border: none;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #31392d;
+    }
+
+    .href {
+        color: white;
+    }   
+
+    .error{
+        margin-top: 25px;
+    }
+
+    @media (max-width: 850px){
+        main {
+            width: 80vw;
+        }
+        form{
+            width: 100%;
+            height: 100%;
+        }
+    }
+</style>
 <body>
-    <div id="content">
-        <h2>Welcome back!</h2>
-        <form id="loginForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Username" required>
-            <label for="password">Password:</label>
+    <main>
+        <h1>Welcome Back!</h1>
+        <form action="" id="loginForm">
+            <input type="text" id="email" name="email" placeholder="Email" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
             <input type="submit"></input>
         </form>
-    </div>
-    <script src="scripts/login.js"></script>
+    </main>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Login successful!');
+                    console.log('User details:', data.user); // TODO: Handle user data as needed
+                } else {
+                    alert(`Login failed: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+    </script>
 </body>
 </html>
